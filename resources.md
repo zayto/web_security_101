@@ -1,10 +1,23 @@
 # Resources
 
-## Articles
+
+## Documentation
+
+| Resource | Description |
+|---|---|
+|[OWASP Top Ten 2017](https://owasp.org/www-project-top-ten/OWASP_Top_Ten_2017/)|Documentation about web app security (covers top 10 most common vulns, provides great examples, guidelines, tools and other references to read)|
+|[OWASP XSS filter evasion cheatsheet](https://owasp.org/www-community/xss-filter-evasion-cheatsheet)||
+|[PortSwigger XSS cheatsheet](https://portswigger.net/web-security/cross-site-scripting/cheat-sheet#angularjs-sandbox-escapes-reflected)|An up to date XSS cheat sheet by the creators of the Burp Suite|
+|[GitLab's RedTeam Tech Notes](https://gitlab.com/gitlab-com/gl-security/security-operations/gl-redteam/red-team-tech-notes)|Articles, tools, talks shared by GitLab's RedTeam|
+|[GitLab's RedTeam GKE-K8S attacks](https://gitlab.com/gitlab-com/gl-security/security-operations/gl-redteam/red-team-tech-notes/-/blob/master/K8s-GKE-attack-notes/README.md)|A huge guide on the GKE architecture, GKE recon, and attack scenarios |
+|[GitLab Security Practices](https://about.gitlab.com/handbook/security/#what-to-do-if-you-suspect-an-email-is-a-phishing-attack)|GitLab Security Guidelines for employees and a good read/reminder on Phishing Attacks|
+|[PortSwigger' Web Security Academy](https://portswigger.net/web-security)|Free online web security training course (labs)|
+
+## Random articles
 This section lists various resources on the following topics: web application security, bug bounty stories, disclosed vulnerabilities, web security research, ...
 
-|Resource|TL;DR;|Something I learnt
-|---|---|---|---|
+|Resource|TL;DR;|Something I learnt|
+|---|---|---|
 |[Phishing attack on Office 365](https://threatpost.com/office-365-phishing-attack-leverages-real-time-active-directory-validation/159188/)|Attackers checking AD credentials via API in real time as the victim enters its credentials on the fake landing page|Phishing attacks are more likely to work when sent on a Friday evening with an important/worrying title (victim is tired, pays less attention, more prone to click)|
 [Here is why you need HTTPS even on a static website](https://www.troyhunt.com/heres-why-your-static-website-needs-https/) and associated [video](https://www.youtube.com/watch?v=_BNIkw4Ao9w&feature=emb_logo)|HTTPS always necessary to ensure integrity of page (no scripts injected, no content modified)|Any content can be injected (keylogger, cryptominer, ads, CSRF attacks on routers, DDoS attacks, DOM modification) if the request is over HTTP and you have a MitM (ex: on a WiFi)|
 |[Value proposition of VPNs](https://www.troyhunt.com/padlocks-phishing-and-privacy-the-value-proposition-of-a-vpn/)|Avoid phishing attacks, better privacy and ISP can't watch metadata, also protects you on HTTP calls/badly implemented TLS websites (browser <--> exit node of VPN segment tunnel encrypted)|Metadata seen by ISPs (domain via Server Name Indication) - DNS requests are made in plaintext - 2% of Top 1million sites use HSTS+preloading|
@@ -22,24 +35,11 @@ This section lists various resources on the following topics: web application se
 
 ## Videos | Courses
 
-|Resource|TL;DR;|Something I learnt
-|---|---|---|---|
+|Resource|TL;DR;|Something I learnt|
+|---|---|---|
 |[JS Prototype Pollution (Part 2)](https://www.youtube.com/watch?v=yDmOXhr8wmw), [Part1](https://www.youtube.com/watch?v=J3MIOIqvV8w) | Great video explaining prototype pollution, and how it can be used to perform attacks (data leaks, XSS)|Prototype pollution comes from overriding \_\_proto__ property that all JS objects inherit and that can be copied by error from third-party libraries using merge/copy functions of objects (or during deserialization) It can be used to add any property to a class of objects (or all) - Also learnt about properties being retrieved by chains (from current object to 'parent classes') by looking at constructors|
 |[Understanding CSRF - tutorial](https://www.youtube.com/watch?v=hW2ONyxAySY)| TO WATCH|-|
 |[HTTPS crash course](https://www.pluralsight.com/courses/https-every-developer-must-know)|TO WATCH|-|
-
-
-## Documentation | Blogs (long reads)
-
-| Resource | Description |
-|---|---|
-|[OWASP Top Ten 2017](https://owasp.org/www-project-top-ten/OWASP_Top_Ten_2017/)|Documentation about web app security (covers top 10 most common vulns, provides great examples, guidelines, tools and other references to read)|
-|[PortSwigger XSS CheatSheet](https://portswigger.net/web-security/cross-site-scripting/cheat-sheet#angularjs-sandbox-escapes-reflected)|An up to date XSS cheat sheet by the creators of the Burp Suite|
-|[GitLab's RedTeam Tech Notes](https://gitlab.com/gitlab-com/gl-security/security-operations/gl-redteam/red-team-tech-notes)|Articles, tools, talks shared by GitLab's RedTeam|
-|[GitLab's RedTeam GKE-K8S attacks](https://gitlab.com/gitlab-com/gl-security/security-operations/gl-redteam/red-team-tech-notes/-/blob/master/K8s-GKE-attack-notes/README.md)|A huge guide on the GKE architecture, GKE recon, and attack scenarios |
-|[GitLab Security Practices](https://about.gitlab.com/handbook/security/#what-to-do-if-you-suspect-an-email-is-a-phishing-attack)|GitLab Security Guidelines for employees and a good read/reminder on Phishing Attacks|
-
-
 
 
 ## Others
