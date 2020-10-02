@@ -30,9 +30,9 @@ HTTPS helps against script injections (cryptominers, keyloggers, ads...), DOM pa
 
 
 
-## HSTS (Http Strict Transport Security)
+## HSTS (HTTP Strict Transport Security)
 * **_Strict-Transport-Security_** HTTP **response header**  
-* **How it works**: a response header is returned by the server and says 'For the next X seconds (maxAge), the browser may not make an insecure request. It should be used with preloading for maximum security (if the user has never been on the website before, it will ensure it loads over HTTPS).
+* **How it works**: a response header is returned by the server and says 'For the next X seconds (maxAge), the browser may not make an insecure request on this domain. It should be used with preloading for maximum security (if the user has never been on the website before, it will ensure it loads over HTTPS even on the first connection).
   
 By default in browsers, the first request goes through HTTP if HTTPS is not mentionned, and usually the server will return a 301 Redirect to use HTTPS instead. If HSTS is set, then all the requests after the first one will ensure the use of HTTPS (until maxAge). See [RFC#6797](https://tools.ietf.org/html/rfc6797).
 
@@ -44,8 +44,7 @@ Further reading: [Understanding HTTP Strict Transport Security (HSTS) and preloa
 
 
 ## Preloading
-Preloaded websites in browsers that use HSTS ensure only HTTPS requests can be used between the client and the server (if the user has never been there before, it will only be loaded over HTTPS). Preloaded website lists are embedded in binaries of the browsers (see [HSTSpreload.org](https://hstspreload.org/) for submissions) and ensure HTTPS from the first request.  
-It should be used for the entire site and its subdomains.
+Websites that use HSTS and the **preload option** ensure only HTTPS requests can be used between the client and the server (even if the user has never been there before, it will only be loaded over HTTPS no matter what - browser does a 307 Internal Redirect). Preloaded website lists are embedded directly in browsers binaries (see [HSTSpreload.org](https://hstspreload.org/) for submissions) and the browser itself forces the use of HTTPS from the first request. It should be used for the entire site and its subdomains.
 > "However, be aware that inclusion in the preload list cannot easily be undone. Domains can be removed, but it takes months for a change to reach users with a Chrome update. Don't request inclusion for HSTS preloading unless you're sure that you can support HTTPS for your entire site and all its subdomains in the long term." - from [hstspreload.org](https://hstspreload.org/)
 
 * **HSTS + preloading** should be considered the standard for security
@@ -272,6 +271,7 @@ The XSS payload input is not stored in a database but reflected on some other pa
 * [What Every Developer Must Know About HTTPS](https://www.pluralsight.com/courses/https-every-developer-must-know) (3h30min course on Pluralsight)
 * [Here's Why Your Static Website Needs HTTPS](https://www.troyhunt.com/heres-why-your-static-website-needs-https/)
 * [Web App attacks 2019](https://www.ptsecurity.com/ww-en/analytics/web-application-attacks-2019/)
+* [We didn't encrypt your password, we hashed it. Here's what that means](https://www.troyhunt.com/we-didnt-encrypt-your-password-we-hashed-it-heres-what-that-means/)
 
 
 
