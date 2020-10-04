@@ -1,4 +1,17 @@
-# 1. HTTPS 
+<h1 style="text-align: center;">Web Security 101</h1>
+
+# Summary
+- [HTTPS](#https)
+- [VPNs](#vpns)
+- [TLS](#tls)
+- [HTTP headers and cookies](#headers)
+- [Attacks overview](#attacks)
+- [Other resources](#resources)
+- [Glossary](#glossary)
+
+<br>
+
+# 1. HTTPS <a id="https"></a>
 ## Definition
 > "**HTTPS (Hypertext Transfer Protocol Secure)** is an internet communication protocol that protects the integrity and confidentiality of data between the user's computer and the site.
 In HTTPS, the communication protocol is encrypted using Transport Layer Security (**TLS**) or, formerly, Secure Sockets Layer (**SSL**). The protocol is therefore also referred to as HTTP over TLS, or **HTTP over SSL**.
@@ -80,7 +93,10 @@ Websites that use HSTS and the **preload option** ensure only HTTPS requests can
 * Related [X-Frames-Options](https://infosec.mozilla.org/guidelines/web_security#x-frame-options) header
 
 
-# 2. VPNs (Virtual Private Networks)
+<br>
+
+# 2. VPNs (Virtual Private Networks) <a id="vpns"></a>
+
 > TODO Research more about VPNs, how they work, good/secure ones  
 > More on the value proposition of VPNs: [Troy article about the 3 Ps](https://www.troyhunt.com/padlocks-phishing-and-privacy-the-value-proposition-of-a-vpn/) aka Padlocks, Phishing and Privacy
 
@@ -104,7 +120,10 @@ VPNs can **blackhole/block bad DNS** (see the hostname you are connecting to and
 
 
 
-# 3. TLS (Transport Layer Security)
+<br>
+
+# 3. TLS (Transport Layer Security) <a id="tls"></a>
+
 ## TLS
 >TODO
 
@@ -125,7 +144,10 @@ VPNs can **blackhole/block bad DNS** (see the hostname you are connecting to and
 
 
 
-# 4. HTTP Headers and Cookies
+<br>
+
+# 4. HTTP Headers and Cookies <a id="headers"></a>
+
 ## HTTP Request Headers
 > TODO
 > Host, Referer, Origin, X-Forwarded-Host
@@ -176,7 +198,11 @@ Limitations:
 > TODO
 
 
-# 5. Attacks overview
+
+<br>
+
+# 5. Attacks overview <a id="attacks"></a>
+
 ## Clickjacking attacks
 > TODO [OWASP Defense CheatSheet](https://cheatsheetseries.owasp.org/cheatsheets/Clickjacking_Defense_Cheat_Sheet.html), ...
 
@@ -346,7 +372,10 @@ The double submit cookie is simple to implement but possible to bypass if the at
 ## 
 
 
-# 6. Other resources
+<br>
+
+# 6. Other resources <a id="resources"></a>
+
 ## Documentation
 * [OWASP Top 10](https://owasp.org/www-project-top-ten/)
 * [Mozilla Web Security](https://infosec.mozilla.org/guidelines/web_security)
@@ -363,7 +392,10 @@ The double submit cookie is simple to implement but possible to bypass if the at
 
 
 
-# 7. Glossary
+<br>
+
+# 7. Glossary <a id="glossary"></a>
+
 A few acronyms I keep on forgetting, that might also be useful to others...
 
 |Acronym|Description|

@@ -40,7 +40,7 @@ This section lists various resources on the following topics: web application se
 |Resource|TL;DR;|Something I learnt|
 |---|---|---|
 |[JS Prototype Pollution (Part 2)](https://www.youtube.com/watch?v=yDmOXhr8wmw), [Part1](https://www.youtube.com/watch?v=J3MIOIqvV8w) | Great video explaining prototype pollution, and how it can be used to perform attacks (data leaks, XSS)|Prototype pollution comes from overriding \_\_proto__ property that all JS objects inherit and that can be copied by error from third-party libraries using merge/copy functions of objects (or during deserialization) It can be used to add any property to a class of objects (or all) - Also learnt about properties being retrieved by chains (from current object to 'parent classes') by looking at constructors|
-|[Understanding CSRF - tutorial](https://www.youtube.com/watch?v=hW2ONyxAySY)| TO WATCH|-|
+|[Understanding CSRF - tutorial](https://www.youtube.com/watch?v=hW2ONyxAySY)| Cross-Site Request Forgery is an attack to perform authenticated actions on a user currently logged in by taking advantage of its auth cookie. CSRF token based protection can help mitigate CSRF if well implemented|CSRF is the execution of an authenticated and valid request on a domain where the victim is logged in, from a malicious page, without the victim knowing and taking advantage of auth cookies attached to a domain being sent automaticallly by the browser. Also learnt about how it can be mitigated using a token based CSRF protection (between the server and the client)|
 |[HTTPS crash course](https://www.pluralsight.com/courses/https-every-developer-must-know)|TO WATCH|-|
 
 
