@@ -40,7 +40,14 @@ HTTPS helps against script injections (cryptominers, keyloggers, ads...), DOM pa
 
 > TODO
 
+### HTTPS configuration
+> TODO   
+> * [Scott Helme HTTPS Cheat Sheet](https://scotthelme.co.uk/https-cheat-sheet/)  
+> * [SSL Labs](https://www.ssllabs.com/ssltest/index.html) - test your HTTPS config  
+> * [SecurityHeaders.io](https://securityheaders.io/) - test your security headers  
+> * [Mozilla SSL Configurator](https://ssl-config.mozilla.org/) - SSL configuration generator (for nginx/apache/traefik...)
 
+### HTTP/2
 
 
 ## HSTS (HTTP Strict Transport Security)
@@ -51,7 +58,10 @@ By default in browsers, the first request goes through HTTP if HTTPS is not ment
 
 *i.e: strict-transport-security: max-age=31536000; includeSubDomains; preload*
 
-Further reading: [Understanding HTTP Strict Transport Security (HSTS) and preloading it into the browser - Troy Hunt](https://www.troyhunt.com/understanding-http-strict-transport/)
+### More on HSTS
+
+* [Understanding HTTP Strict Transport Security (HSTS) and preloading it into the browser - Troy Hunt](https://www.troyhunt.com/understanding-http-strict-transport/)
+* [Scott Helme HSTS Cheat Sheet](https://scotthelme.co.uk/hsts-cheat-sheet/)
 
 > TODO Research about the 'Trust On First Use' problem (TOFU) - is the initial request being secured? Usually (without HSTS and preload), the first connection is insecure and then the connection becomes secure
 
@@ -68,7 +78,7 @@ Websites that use HSTS and the **preload option** ensure only HTTPS requests can
 
 
 
-## Further readings / Documentation to implement HTTPS
+## More on HTTPS and how to implement it
 
 * [Mozilla guidelines on web security](https://infosec.mozilla.org/guidelines/web_security)
 * [Google guidelines on web security](https://developers.google.com/web/fundamentals/security/?hl=en)
@@ -76,7 +86,7 @@ Websites that use HSTS and the **preload option** ensure only HTTPS requests can
 * [What is an SSL certificate? - Cloudflare](https://www.cloudflare.com/learning/ssl/what-is-an-ssl-certificate/)
 * [Let's encrypt FAQ](https://letsencrypt.org/docs/faq/)
 * [HTTPS is easy - a guide by Troy Hunt](https://httpsiseasy.com/) - *"Troy Hunt is a Microsoft Regional Director and MVP, web security expert known for public education and outreach on security topics" (wikipedia). He also runs a [blog (troyhunt.com)](https://www.troyhunt.com/) with knowledgeable content about web security and his [Have I Been Pwned](https://haveibeenpwned.com/) project.*
-* ["What Every Developer Must Know About HTTPS"](https://www.pluralsight.com/courses/https-every-developer-must-know) : Pluralsight course on HTTPS
+* ["What Every Developer Must Know About HTTPS"](https://www.pluralsight.com/courses/https-every-developer-must-know): Pluralsight course on HTTPS
 
 
 ## Mobile apps
@@ -84,13 +94,137 @@ Websites that use HSTS and the **preload option** ensure only HTTPS requests can
 
 
 
-## CSP (Content Security Policy)
-> TODO 
+## Content Security Policy (CSP)
+The [Content-Security-Policy](https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP) is an HTTP response header that can help mitigate XSS/data injection/clickjacking attacks. If the CSP header is not defined, browsers usually use the [Same-origin policy](https://developer.mozilla.org/en-US/docs/Web/Security/Same-origin_policy). "The **Same-origin policy** restricts how a document or script loaded from one origin can interact with a resource from another origin. It helps isolate potentially malicious documents, reducing possible attack vectors." - Mozilla MDN *(most of the content from this CSP section comes directly from the [Mozilla MDN CSP page](https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP))*.
+
+A CSP response header is a simple string containing the policy: 
+
+```
+"Content-Security-Policy: policy"
+```
+
+### Implementing a Content-Security Policy
+In order to use the CSP, the web server should add the header to every HTTP response. CSP implementation can be done in a few steps:
+
+1. **Specify the CSP**: what resources from the web page should be allowed to load from where
+2. **Write the policy**: a policy is the string you place in the header that defines the CSP behaviour using a series of policy directives (keywords to specify how to handle each resource type)
+3. **Test the policy**: The HTTP header **Content-Security-Policy-Report-Only**: *policy* can be used to deploy a policy and test it on a live application. Any policy violations will get reported to the provided URI. If both headers are present, the CSP header is enforced and the CSP report header is only used to generate reports but is not enforced on the page.
+4. **Enable reporting**: using the **report-uri** directive in the CSP and then process the reports on your server
+
+```
+Content-Security-Policy: default-src 'self'; report-uri http://reportcollector.example.com/collector.cgi
+```
+
+### Reminders
+"Your policy should include a **default-src** policy directive, which is a fallback for other resource types when they don't have policies of their own. For a complete list, see the description of the [default-src directive](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/default-src)" - Mozilla MDN. One ore more sources can be allowed for the default-src directive, see:
+
+```
+Content-Security-Policy: default-src <source>;
+Content-Security-Policy: default-src <source> <source>;
+```
+
+
+**There is no inheritance with the *default-src* directive**, any directive specified with the default one will override the behaviour.
+
+```
+Content-Security-Policy: default-src <source>; script-src: <source2> // only source2 scripts are allowed
+```
+
+The **'self'** attribute refers to the origin from which the protected document is being served, including the same URL scheme and port number. The single quotes are required.
+
+Google made the [CSP Evaluator](https://csp-evaluator.withgoogle.com/) tool to help developers test CSPs and see if they have insecure policies or important missing policies.
+
+
+### CSP examples
+A few common CSP examples taken from the [Mozilla MDN CSP page](https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP):
+
+#### All content must come from the website own domain (exclude its subdomains)
+
+```
+Content-Security-Policy: default-src 'self'  
+```
+
+#### All content must come from the website own domain or a trusted domain and its subdomains
+
+```
+Content-Security-Policy: default-src 'self' *.trusted.com
+```
+
+#### Specify images, media, scripts domains
+In the example below, by default the content must come from the website own domain with the exception of:   
+
+- images can come from any domain
+- scripts are only allowed to come from a specific server (subdomain of example.com)
+- videos/media must come from a specific domain (and not his subdomains)
+
+
+```
+Content-Security-Policy: default-src 'self'; img-src *; media-src media1.com media2.com; script-src userscripts.example.com
+```
+
+#### Ensure all content is loaded through HTTPS (by specifying the origin domain with HTTPS)
+
+```
+Content-Security-Policy: default-src https://onlinebanking.jumbobank.com
+```
+
+### Strict-dynamic directive
+A directive to simplify the implementation of CSPs for scripts as the policies can sometimes be bypassed and can be hard to maintain (partly because scripts are often served by CDNs which can change). This directive relies on **hashes** or **nonces attributes** specified with the script tag. "It allows scripts which are given access to the page (via nonces or hashes) to bring in their dependencies without adding them explicitly to the page’s policy" - W3.org. Only non-"parser-inserted" script elements (inside a script) are allowed to be loaded on the page (see [W3.org strict dynamic usage](https://w3c.github.io/webappsec-csp/#strict-dynamic-usage) for a better explanation).
+
+For example, the following *script.js* is loaded within a page with the CSP header set below:
+
+```
+Content-Security-Policy: script-src 'nonce-DhcnhD3khTMePgXwdayK9BsMqXjhguV' 'strict-dynamic'
+```
+
+```
+<script src="https://cdn.example.com/script.js" nonce="DhcnhD3khTMePgXwdayK9BsMqXjhguVV" ></script>
+// request to cdn.example.com won't be blocked because of the nonce attribute
+```
+
+Depending on how dependencies are added within *script.js* (other scripts loaded inside the script), they will be allowed or blocked from loading in the page. An example of a **"parser-inserted" script** element that would be blocked: 
+
+```javascript
+document.write('<scr' + 'ipt src="/sadness.js"></scr' + 'ipt>');
+```
+
+However, this script would be allowed within script.js (*not a parser-inserted script*):
+
+```javascript
+var s = document.createElement('script');
+s.src = 'https://othercdn.not-example.net/dependency.js';
+document.head.appendChild(s);
+```
+
+
+> TODO Research more on this
 > 
-* [Google CSP doc](https://developers.google.com/web/fundamentals/security/csp)
-* [W3.org CSP2](https://www.w3.org/TR/CSP2/)
-* [Google CSP Evaluator](https://csp-evaluator.withgoogle.com/)
-* Related [X-Frames-Options](https://infosec.mozilla.org/guidelines/web_security#x-frame-options) header
+* [W3.org strict dynamic usage](https://w3c.github.io/webappsec-csp/#strict-dynamic-usage)
+* [strict-dynamic CSP directive](https://content-security-policy.com/strict-dynamic/)
+* [csp.withgoogle.com FAQ](https://csp.withgoogle.com/docs/faq.html)
+
+
+### More on Content-Security Policy
+
+* [Mozilla CSP documentation](https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP)
+* [Google CSP documentation](https://developers.google.com/web/fundamentals/security/csp)
+* [Scott Helme CSP Cheat Sheet](https://scotthelme.co.uk/csp-cheat-sheet/): a guide on CSP explaining the different directives available, and additional useful resources* [W3.org CSP2 Specification](https://www.w3.org/TR/CSP2/)
+* [CSP Quick Reference Guide](https://content-security-policy.com/) - a guide/cheat sheet on CSP by Foundeo
+* [Google CSP evaluator](https://csp-evaluator.withgoogle.com/) - a tool to review CSP policies and help identify CSP bypasses
+* Related [X-Frames-Options header](https://infosec.mozilla.org/guidelines/web_security#x-frame-options) to restrict how a website can be embedded in an \<iframe> within itself or from another domain. It can be coupled with the **frame-ancestors** CSP directive
+* More on the **[strict-dynamic CSP directive](https://content-security-policy.com/strict-dynamic/)** that can be used to specify that a root script is allowed to be loaded on the page (and other scripts loaded within the root script are also allowed) by using a *nonce* or a *hash* inside the script tag attributes.
+
+
+
+
+## Same-origin Policy
+> TODO
+
+## Certificates
+> TODO
+
+## Certificates Authorities
+> TODO Also look at reports from [Crawler.ninja tool]([https://crawler.ninja/](https://crawler.ninja/) (from Alexa Top 1 million websites visited) for infos about the use of HTTPS, Certificates and other features (ex: [March 2020 report](https://scotthelme.co.uk/top-1-million-analysis-march-2020/))
 
 
 <br>
@@ -115,7 +249,7 @@ VPNs can **blackhole/block bad DNS** (see the hostname you are connecting to and
 
 *i.e. NordVPN*
 
-## Further reading on VPNs
+### More on VPNs
 > TODO
 
 
@@ -138,11 +272,23 @@ VPNs can **blackhole/block bad DNS** (see the hostname you are connecting to and
 >TODO [cloudflare blog](https://blog.cloudflare.com/introducing-0-rtt/), [ssl.com article](https://www.ssl.com/faqs/network-attacks-and-security-issues/), [LDAP wiki](https://ldapwiki.com/wiki/0-RTT%20Handshakes), [another article](https://blog.trailofbits.com/2019/03/25/what-application-developers-need-to-know-about-tls-early-data-0rtt/)
 
 
-## Further reading on TLS
+### More on TLS
 > TODO
 
 
+## Vulnerability disclosure on web applications
+### security.txt
+The security.txt standard was created by security researcher [@EdOverflow](https://twitter.com/edoverflow) and offers a simple solution for security researchers or anyone finding a vulnerability in an application to get contact information \(usually an email adress\) to get in touch with the right team and address the security issue. This **security.txt** text file is sitting in the **.well-known directory** at the root of the application. It can contain information such as:  
 
+* contact information to reach the security team (email address)
+* the company's policy regarding responsible discloures and the process to handle those
+* a PGP public key to send encrypted emails to the security team
+
+Few websites use this standard but it is gaining popularity and you can find security.txt examples on websites such as Google, Facebook, Dropbox, ...  
+See:
+
+* [https://www.google.com/.well-known/security.txt](https://www.google.com/.well-known/security.txt), [https://www.facebook.com/.well-known/security.txt](https://www.facebook.com/.well-known/security.txt)
+* [Crawler.ninja analysis](https://crawler.ninja/files/security-txt-sites.txt) on security.txt files in top 1 million websites
 
 <br>
 
@@ -173,12 +319,12 @@ Ensures that the cookie will never be sent over an insecure connection (HTTP req
 > TODO
 
 ### SameSite
-SameSite is a cookie attribute (from the Set-Cookie response header) which aims to mitigate CSRF attacks (can [sometimes](https://tools.ietf.org/html/draft-ietf-httpbis-rfc6265bis-02#section-5.3.7.1) be bypassed). It helps the browser decide whether to send cookies along with cross-site requests. Possible values for this attribute are :
+SameSite is a cookie attribute (from the Set-Cookie response header) which aims to mitigate CSRF attacks (can [sometimes](https://tools.ietf.org/html/draft-ietf-httpbis-rfc6265bis-02#section-5.3.7.1) be bypassed). It helps the browser decide whether to send cookies along with cross-site requests. Possible values for this attribute are:
 
-* **Lax** : send the cookie except on certain CSRF-prone request methods such as POST/PUT - only send for top-level navigation (such as clicking a link, requests made by JavaScript do not include the cookie) using safe HTTP methods ex: GET, HEAD, OPTIONS. *(default value for cookies in Chrome since Feb. 2020)*
-*  **Strict** : never send the cookie from a cross-site context, ex: when clicking on a link from an external website
+* **Lax**: send the cookie except on certain CSRF-prone request methods such as POST/PUT - only send for top-level navigation (such as clicking a link, requests made by JavaScript do not include the cookie) using safe HTTP methods ex: GET, HEAD, OPTIONS. *(default value for cookies in Chrome since Feb. 2020)*
+*  **Strict**: never send the cookie from a cross-site context, ex: when clicking on a link from an external website
 
-* **None** : always send the cookie *(cookies set as SameSite None require the Secure attribute in Chrome)*
+* **None**: always send the cookie *(cookies set as SameSite None require the Secure attribute in Chrome)*
 
 > Set-Cookie: JSESSIONID=xxxxx; SameSite=Strict  
 > Set-Cookie: JSESSIONID=xxxxx; SameSite=Lax
@@ -189,12 +335,12 @@ Limitations:
 - some frameworks are tolerant to different HTTP methods, a request could be accepted as a GET request even if it will be resolved by design using the POST request route/controller (thus bypassing the SameSite cookie attribute)
 
 
-### More on SameSite:
+### More on SameSite
 - [OWASP CSRF Prevention - SameSite cookie attribute](https://cheatsheetseries.owasp.org/cheatsheets/Cross-Site_Request_Forgery_Prevention_Cheat_Sheet.html#samesite-cookie-attribute)
 - [IETF definition of SameSite cookie attribute](https://tools.ietf.org/html/draft-ietf-httpbis-rfc6265bis-02#section-5.3.7.1)
 - [PortSwigger - Defending against CSRF with SameSite cookies](https://portswigger.net/web-security/csrf/samesite-cookies)
 
-## Further reading on HTTP headers and cookies
+### More on HTTP headers and cookies
 > TODO
 
 
@@ -208,7 +354,9 @@ Limitations:
 
 
 ## SSL stripping
- **MITM attack** where the attacker communicates with the client over HTTP and relays the requests to the server over HTTP (or HTTPS if the server does not allow HTTP). That way the attacker sees all the client's traffic over HTTP. (Connection is 'stripped' of SSL and downgraded to HTTP).
+ **MITM attack** where the attacker communicates with the victim over HTTP and relays the requests to the server over HTTP(S). That way the attacker sees all the client's traffic over HTTP. (The victim's connection is 'stripped' of SSL and downgraded to HTTP).
+
+An introduction to a MitM SSL stripping attack using Karma and SSLstrip: [the WiFi Pienapple](https://scotthelme.co.uk/wifi-pineapple-karma-sslstrip/).
 
 
 ## XSS (Cross-Site Scripting)
@@ -254,7 +402,7 @@ What does a CSRF request look like? It is the same as the actual request to perf
 CSRF happens because the request is predictable (url, method, data). In order to protect an action, you need to add unpredictability (aka **CSRF token/anti-forgery token**) and validate it on the server.
 
 ### Token-based CSRF mitigation
-Different patterns using a CSRF token can be used to mitigate CSRF attacks, according to the OWASP cheat sheet : 
+Different patterns using a CSRF token can be used to mitigate CSRF attacks, according to the OWASP cheat sheet: 
 
 - [Synchronizer Token Pattern](https://cheatsheetseries.owasp.org/cheatsheets/Cross-Site_Request_Forgery_Prevention_Cheat_Sheet.html#synchronizer-token-pattern) - requires to maintain a list of valid issued tokens on the server (state)
 - [Encryption Based Token Pattern](https://cheatsheetseries.owasp.org/cheatsheets/Cross-Site_Request_Forgery_Prevention_Cheat_Sheet.html#encryption-based-token-pattern) - does not need to maintain a list of tokens on the server (stateless pattern)
@@ -289,7 +437,9 @@ This should be avoided when developping the application. The **POST, PUT, PATCH,
 ### Double submit token protection limitation - from [PortSwigger](https://portswigger.net/web-security/csrf)
 
 The double submit cookie is simple to implement but possible to bypass if the attacker manages to set a cookie in the victim's browser (if there is no other server side validation apart from verifying 'csrf param === CSRF cookie value').
-> Sometimes, the website only stores the CSRF token clientside and does not maintain a list of valid issued tokens on the server. It only generates a CSRF token clientside and requires at validation that the csrf param in the request has the same value as the CSRF cookie. This is sometimes called the "double submit" defense against CSRF, and is advocated because it is simple to implement and avoids the need for any server-side state. The attacker can perform a CSRF attack if the website contains any cookie setting functionality. He does not need to obtain a valid token but simply invent a token (perhaps in the required format, if that is being checked), leverage the cookie-setting behavior to place their cookie into the victim's browser, and feed their token to the victim in their CSRF attack.
+
+Sometimes, the website only stores the CSRF token clientside and does not maintain a list of valid issued tokens on the server. It only generates a CSRF token clientside and the server validates that the csrf param in the request has the same value as the CSRF cookie. This is sometimes called the "double submit". It's a simple defense to implement against CSRF and avoids the need for any server-side state. The attacker can perform a CSRF attack if the website contains any cookie setting functionality. He does not need to obtain a valid token but can simply invent a token (with a valid-like format), and set the cookie into the victim's browser for the CSRF attack. _(mostly paraphrased from section "CSRF token is simply duplicated in a cookie" in the above PortSwigger link)_
+
 
 ### Other mitigation techniques:
 
@@ -300,7 +450,7 @@ The double submit cookie is simple to implement but possible to bypass if the at
 *Note 1: Many frameworks have __built-in CSRF protection__. Avoid re-implementing it yourself...*  
 *Note 2: XSRF is the same acronym as CSRF*
 
-### More on CSRF:
+### More on CSRF
 * [Understanding CSRF](https://www.youtube.com/watch?v=hW2ONyxAySY) - a tutorial video by Troy Hunt
 * [OWASP CSRF Prevention Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Cross-Site_Request_Forgery_Prevention_Cheat_Sheet.html) - OWASP guidelines
 * [PortSwigger CSRF](https://portswigger.net/web-security/csrf) - article & labs
@@ -407,6 +557,7 @@ A few acronyms I keep on forgetting, that might also be useful to others...
 |IDOR|Insecure Direct Object Reference|
 |PII|Personally Identifiable Information|
 |SSL|Secure Sockets Layer|
+|SSRF|Server-Side Request Forgery|
 |TLS|Transport Layer Security|
 |WAF|Web Application Firewall|
 |XXE|XML External Entity|
