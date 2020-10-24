@@ -1,14 +1,19 @@
 <h1 style="text-align: center;">Web Security 101</h1>
 
-# Summary
+# Table of Contents
 1. [HTTPS](#https)
-- [TLS](#tls)
-- [Content Security Policies](#csp)
-- [HTTP headers and cookies](#headers)
-- [Attacks overview](#attacks)
-- [Miscellaneous](#misc)
-- [Other resources](#resources)
-- [Glossary](#glossary)
+2. [TLS](#tls)
+3. [Content Security Policies](#csp)
+4. [HTTP headers and cookies](#headers)
+5. [Attacks overview](#attacks)
+	- [SSL Stripping](#ssls) 
+	- [XSS](#xss)
+	- [CSRF](#csrf)
+	- [SSRF](#ssrf)
+6. [Miscellaneous](#misc)
+	- [VPNs](#vpns)
+7. [Other resources](#resources)
+8. [Glossary](#glossary)
 
 <br>
 
@@ -355,14 +360,14 @@ Limitations:
 > TODO [OWASP Defense CheatSheet](https://cheatsheetseries.owasp.org/cheatsheets/Clickjacking_Defense_Cheat_Sheet.html), ...
 
 
-## SSL stripping
+## SSL stripping <a id="ssls"></a>
  **MITM attack** where the attacker communicates with the victim over HTTP and relays the requests to the server over HTTP(S). That way the attacker sees all the client's traffic over HTTP. (The victim's connection is 'stripped' of SSL and downgraded to HTTP).
 
 An introduction to a MitM SSL stripping attack using Karma and SSLstrip: [the WiFi Pienapple](https://scotthelme.co.uk/wifi-pineapple-karma-sslstrip/).
 
 
-## XSS (Cross-Site Scripting)
-> TODO
+## XSS (Cross-Site Scripting) <a id="xss"></a>
+> TODO Still a WIP
 
 A XSS is a technique to execute your own javascript on the domain of an application.
 ### XSS Cheat Sheets
@@ -404,7 +409,7 @@ X-XSS-Protection: 1; report=<reporting-uri> // enable protection and send a repo
 
 
 
-## CSRF (Cross-Site Request Forgery)
+## CSRF (Cross-Site Request Forgery) <a id="csrf"></a>
 ### Definition
 CSRF is a type of attack to make people send unintentionnal requests to a target domain (on which they are logged in and can perform specific actions - ex: change their password).
 
@@ -472,9 +477,9 @@ Sometimes, the website only stores the CSRF token clientside and does not mainta
 * [Robust Defenses for Cross-Site Request Forgery](https://seclab.stanford.edu/websec/csrf/csrf.pdf) research paper
 
 
-## SSRF (Server-Side Request Forgery)
+## SSRF (Server-Side Request Forgery) <a id="ssrf"></a>
 
-> TODO
+> TODO Still a WIP
 
 ### Definition
 SSRF is a vulnerability where an attacker forces a server to perform requests (usually a HTTP request but the server can often use many different protocols). The crafted HTTP request sent by the attacker with a payload triggers the server-side request. This attack is similar to CSRF (unintentional requests being executed) but here the victim is the vulnerable server.
@@ -549,12 +554,14 @@ SSRF is a vulnerability where an attacker forces a server to perform requests (u
 > TODO [wiki](https://fr.wikipedia.org/wiki/ARP_poisoning)
 
 ## XML External Entity (XXE) Processing
+> TODO
 
 ## WAF Bypass
+> TODO
 
 ## IDOR (Insecure Direct Object Reference)
+> TODO
 
-## 
 
 
 <br>
@@ -593,7 +600,6 @@ VPNs can **blackhole/block bad DNS** (see the hostname you are connecting to and
 * [OWASP Top 10](https://owasp.org/www-project-top-ten/)
 * [Mozilla Web Security](https://infosec.mozilla.org/guidelines/web_security)
 * [Google Web Security](https://developers.google.com/web/fundamentals/security/?hl=en)
-* 
 
 
 ## Blogs / Articles / Videos
