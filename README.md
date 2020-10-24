@@ -2,19 +2,21 @@
 
 # Table of Contents
 1. [HTTPS](#https)
-2. [TLS](#tls)
+2. [Transport Layer Security](#tls)
 3. [Content Security Policies](#csp)
-4. [HTTP headers and cookies](#headers)
-5. [Attacks overview](#attacks)
+4. [Same-Origin Policy](#sop)
+5. [Cross-Origin Resource Sharing](#cors)
+6. [HTTP headers and cookies](#headers)
+7. [Attacks overview](#attacks)
 	- [SSL Stripping](#ssls) 
 	- [XSS](#xss)
 	- [CSRF](#csrf)
 	- [SSRF](#ssrf)
-6. [Miscellaneous](#misc)
+8. [Miscellaneous](#misc)
 	- [VPNs](#vpns)
 	- [security.txt](#securitytxt)
-7. [Other resources](#resources)
-8. [Glossary](#glossary)
+9. [Other resources](#resources)
+10. [Glossary](#glossary)
 
 <br>
 
@@ -110,7 +112,7 @@ Using HSTS and preload option with a website that does not serve everything over
 
 <br>
 
-# 2. TLS (Transport Layer Security) <a id="tls"></a>
+# 2. Transport Layer Security (TLS) <a id="tls"></a>
 
 ## TLS
 >TODO
@@ -255,17 +257,18 @@ document.head.appendChild(s);
 * Related [X-Frames-Options header](https://infosec.mozilla.org/guidelines/web_security#x-frame-options) to restrict how a website can be embedded in an \<iframe> within itself or from another domain. It can be coupled with the **frame-ancestors** CSP directive
 * More on the **[strict-dynamic CSP directive](https://content-security-policy.com/strict-dynamic/)** that can be used to specify that a root script is allowed to be loaded on the page (and other scripts loaded within the root script are also allowed) by using a *nonce* or a *hash* inside the script tag attributes.
 
+<br>
 
 
-
-# Same-origin Policy <a id="sop"></a>
+# 4. Same-origin Policy <a id="sop"></a>
 > TODO  
 > 
 > [Same-origin Policy](https://developer.mozilla.org/en-US/docs/Web/Security/Same-origin_policy)
 > 
 
+<br>
 
-# Cross-Origin Resource Sharing (CORS) <a id="cors"></a>
+# 5. Cross-Origin Resource Sharing (CORS) <a id="cors"></a>
 > TODO  
 > 
 > [CORS](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS)
@@ -275,17 +278,11 @@ document.head.appendChild(s);
 
 
 
-## Certificates
-> TODO  
-> [Mozilla Certificates Transparency](https://developer.mozilla.org/en-US/docs/Web/Security/Certificate_Transparency)
-
-## Certificates Authorities
-> TODO Also look at reports from [Crawler.ninja tool]([https://crawler.ninja/](https://crawler.ninja/) (from Alexa Top 1 million websites visited) for infos about the use of HTTPS, Certificates and other features (ex: [March 2020 report](https://scotthelme.co.uk/top-1-million-analysis-march-2020/))
 
 
 <br>
 
-# 4. HTTP Headers and Cookies <a id="headers"></a>
+# 6. HTTP Headers and Cookies <a id="headers"></a>
 
 ## HTTP Request Headers
 > TODO
@@ -341,7 +338,7 @@ Limitations:
 
 <br>
 
-# 5. Attacks overview <a id="attacks"></a>
+# 7. Attacks overview <a id="attacks"></a>
 
 ## Clickjacking attacks
 > TODO [OWASP Defense CheatSheet](https://cheatsheetseries.owasp.org/cheatsheets/Clickjacking_Defense_Cheat_Sheet.html), ...
@@ -553,7 +550,7 @@ SSRF is a vulnerability where an attacker forces a server to perform requests (u
 
 <br>
 
-# 6. Miscellaneous <a id="misc"></a>
+# 8. Miscellaneous <a id="misc"></a>
 
 ## VPNs (Virtual Private Networks) <a id="vpns"></a>
 
@@ -594,7 +591,7 @@ See:
 
 <br>
 
-# 7. Other resources <a id="resources"></a>
+# 9. Other resources <a id="resources"></a>
 
 ## Documentation
 * [OWASP Top 10](https://owasp.org/www-project-top-ten/)
@@ -613,7 +610,7 @@ See:
 
 <br>
 
-# 8. Glossary <a id="glossary"></a>
+# 10. Glossary <a id="glossary"></a>
 
 A few acronyms I keep on forgetting, that might also be useful to others...
 
