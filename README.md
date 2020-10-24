@@ -12,6 +12,7 @@
 	- [SSRF](#ssrf)
 6. [Miscellaneous](#misc)
 	- [VPNs](#vpns)
+	- [security.txt](#securitytxt)
 7. [Other resources](#resources)
 8. [Glossary](#glossary)
 
@@ -128,20 +129,6 @@ Using HSTS and preload option with a website that does not serve everything over
 ### More on TLS
 > TODO
 
-
-## Vulnerability disclosure on web applications
-### security.txt
-The security.txt standard was created by security researcher [@EdOverflow](https://twitter.com/edoverflow) and offers a simple solution for security researchers or anyone finding a vulnerability in an application to get contact information \(usually an email adress\) to get in touch with the right team and address the security issue. This **security.txt** text file is sitting in the **.well-known directory** at the root of the application. It can contain information such as:  
-
-* contact information to reach the security team (email address)
-* the company's policy regarding responsible discloures and the process to handle those
-* a PGP public key to send encrypted emails to the security team
-
-Few websites use this standard but it is gaining popularity and you can find security.txt examples on websites such as Google, Facebook, Dropbox, ...  
-See:
-
-* [https://www.google.com/.well-known/security.txt](https://www.google.com/.well-known/security.txt), [https://www.facebook.com/.well-known/security.txt](https://www.facebook.com/.well-known/security.txt)
-* [Crawler.ninja analysis](https://crawler.ninja/files/security-txt-sites.txt) on security.txt files in top 1 million websites
 
 <br>
 
@@ -590,6 +577,19 @@ VPNs can **blackhole/block bad DNS** (see the hostname you are connecting to and
 
 ### More on VPNs
 > TODO
+
+## Security.txt (and vulnerability disclosures on web applications)<a id="securitytxt"></a>
+The security.txt standard was created by security researcher [@EdOverflow](https://twitter.com/edoverflow) and offers a simple solution for security researchers or anyone finding a vulnerability in an application to get contact information \(usually an email adress\) to get in touch with the right team and address the security issue. This **security.txt** text file is sitting in the **.well-known directory** at the root of the application. It can contain information such as:  
+
+* contact information to reach the security team (email address)
+* the company's policy regarding responsible discloures and the process to handle those
+* a PGP public key to send encrypted emails to the security team
+
+Few websites use this standard but it is gaining popularity and you can find security.txt examples on websites such as Google, Facebook, Dropbox, ...  
+See:
+
+* [https://www.google.com/.well-known/security.txt](https://www.google.com/.well-known/security.txt), [https://www.facebook.com/.well-known/security.txt](https://www.facebook.com/.well-known/security.txt)
+* [Crawler.ninja analysis](https://crawler.ninja/files/security-txt-sites.txt) on security.txt files in top 1 million websites
 
 
 <br>
